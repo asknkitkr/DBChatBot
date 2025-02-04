@@ -3,7 +3,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 import mysql.connector as msql
 from mysql.connector import Error
-# from langchain.chat_models import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_ollama.llms import OllamaLLM
 # from langgraph.graph import Graph
 
 load_dotenv()
@@ -29,8 +30,15 @@ except Error as e:
     db_connection = None
     cursor = None
 
-# LLM Model - ChatGPT
-# llm = ChatOpenAI(model_name="gpt-3.5-turbo")
+# LLM Model - Ollama
+template = """
+        Question: {question}
+        Answer: Let me think!!!
+"""
+
+prompt = ChatPromptTemplate.from_template(template)
+model = OllamaLLM(model="llama3")
+chain = prompt | model
 
 # fetch products data
 def get_products(brand):
@@ -48,3 +56,6 @@ def get_suppliers(category):
 
 # print(get_suppliers("Textile"))
 # print(get_products("Prestige"))
+
+result = chain.invoke({"question": "How to translate Good Morning in Chinese"})
+print(result)
