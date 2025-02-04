@@ -14,6 +14,7 @@ HOSTNAME = os.getenv('HOSTNAME')
 USERNAME = os.getenv('USERNAME')
 PASSWORD = os.getenv('PASSWORD')
 DATABASE = os.getenv('DATABASE')
+LLM_MODEL = os.getenv('LLM_MODEL')
 
 # Database Connection
 try:
@@ -37,7 +38,7 @@ template = """
 """
 
 prompt = ChatPromptTemplate.from_template(template)
-model = OllamaLLM(model="llama3")
+model = OllamaLLM(model=LLM_MODEL)
 chain = prompt | model
 
 # fetch products data
@@ -57,5 +58,5 @@ def get_suppliers(category):
 # print(get_suppliers("Textile"))
 # print(get_products("Prestige"))
 
-result = chain.invoke({"question": "How to translate Good Morning in Chinese"})
+result = chain.invoke({"question": "Define force"})
 print(result)
